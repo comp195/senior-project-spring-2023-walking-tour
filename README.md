@@ -59,10 +59,19 @@
 > <br>
 
 > ## Contributors
+> ---
 > <p align=center>Alan Khant</p> <br>
-> <p align=center>Milo Zhao</p> <br>
-> <p align=center>TaRhoda Mayberry</p>
+> <p align=center>a_khant@u.pacific.edu </p> 
 >
+> ---
+> <p align=center>Milo Zhao</p> <br>
+> <p align=center>f_zhao1@u.pacific.edu</p> <br>
+> 
+> ---
+> <p align=center>TaRhoda Mayberry</p>
+><p align=center>t_mayberry@u.pacific.edu</p> <br>
+>
+> ---
 >
 >
 >
