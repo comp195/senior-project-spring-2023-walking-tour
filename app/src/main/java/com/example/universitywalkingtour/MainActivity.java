@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
+import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,9 +23,10 @@ public class MainActivity extends AppCompatActivity {
         Uri uri = Uri.parse(videoPath);
         videoView.setVideoURI(uri);
 
-        MediaController mediaController = new MediaController( context: this);
-        videoView.setMediaController(mediaController);
+        MediaController mediaController = new MediaController( this);
         mediaController.setAnchorView(videoView);
+        videoView.setMediaController(mediaController);
+
 
         Start = (Button)findViewById(R.id.button);
         Start.setOnClickListener(new View.OnClickListener() {
