@@ -19,9 +19,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         VideoView videoView = findViewById(R.id.videoView);
-        String videoPath = "android.resource://"+ getPackageName() + "/" + R.raw.Video_Instructions;
+        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.video_instructions;
         Uri uri = Uri.parse(videoPath);
         videoView.setVideoURI(uri);
+
 
         MediaController mediaController = new MediaController( this);
         mediaController.setAnchorView(videoView);
