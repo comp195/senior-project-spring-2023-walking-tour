@@ -7,13 +7,20 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.view.View;
+
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
+
 
 public class start_page extends AppCompatActivity {
     SearchView searchUOPP;
     ListView listUOPP;
     ArrayList <String> arrayBuildings;
     ArrayAdapter <String> adapterBuildings;
+    InputStream inputStream = getResources().openRawResource(R.raw.buildings);
+    CSVFile csvFile = new CSVFile(inputStream);
+    List buildings = csvFile.read();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +32,7 @@ public class start_page extends AppCompatActivity {
         arrayBuildings = new ArrayList <>();
         arrayBuildings.add("Baun Hall");
 
-        adapterBuildings = new ArrayAdapter <>(this,android.R.layout.simple_list_item_1, arrayBuildings);
+        adapterBuildings = new ArrayAdapter <>(this,android.R.layout.simple_list_item_1, buildings);
         listUOPP.setAdapter(adapterBuildings);
         searchUOPP.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
