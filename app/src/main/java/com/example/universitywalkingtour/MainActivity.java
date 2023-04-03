@@ -1,7 +1,6 @@
 package com.example.universitywalkingtour;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,8 +10,8 @@ import android.widget.MediaController;
 import android.widget.VideoView;
 
 public class MainActivity extends AppCompatActivity {
-
-    Button Start;
+    Button startTrip;
+    Button startDirecting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,15 +21,21 @@ public class MainActivity extends AppCompatActivity {
         String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.video_instructions;
         Uri uri = Uri.parse(videoPath);
         videoView.setVideoURI(uri);
-
-
         MediaController mediaController = new MediaController( this);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
 
+        startTrip = (Button)findViewById(R.id.button_trip);
+        startDirecting = (Button)findViewById(R.id.button_directing);
+        startTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent toStart = new Intent(MainActivity.this, start_page.class);
+                startActivity(toStart);
 
-        Start = (Button)findViewById(R.id.button);
-        Start.setOnClickListener(new View.OnClickListener() {
+            }
+        });
+        startDirecting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toStart = new Intent(MainActivity.this, start_page.class);
