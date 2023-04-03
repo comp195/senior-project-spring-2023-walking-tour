@@ -18,7 +18,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-public class start_page extends AppCompatActivity implements OnMapReadyCallback {
+public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
     SearchView searchUOPP;
     ListView listUOPP;
     ArrayList <String> arrayBuildings;
@@ -31,7 +31,7 @@ public class start_page extends AppCompatActivity implements OnMapReadyCallback 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start_page);
+        setContentView(R.layout.activity_trip);
         searchUOPP = findViewById(R.id.searchUOP);
         listUOPP = findViewById(R.id.listUOP);
         listUOPP.setVisibility(View.GONE);

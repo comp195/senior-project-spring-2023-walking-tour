@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         startTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toStart = new Intent(MainActivity.this, start_page.class);
+                Intent toStart = new Intent(MainActivity.this, TripActivity.class);
                 startActivity(toStart);
 
             }
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         startDirecting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toStart = new Intent(MainActivity.this, start_page.class);
+                Intent toStart = new Intent(MainActivity.this, TripActivity.class);
                 startActivity(toStart);
 
             }

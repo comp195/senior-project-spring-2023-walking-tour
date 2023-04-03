@@ -13,7 +13,7 @@
         android:theme="@style/Theme.UniversityWalkingTour"
         tools:targetApi="31">
         <activity
-            android:name=".start_page"
+            android:name=".TripActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
