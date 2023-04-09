@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         startDirecting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent toStart = new Intent(MainActivity.this, TripActivity.class);
+                Intent toStart = new Intent(MainActivity.this, DirectionActivity.class);
                 startActivity(toStart);
 
             }
