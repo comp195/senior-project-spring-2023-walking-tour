@@ -25,15 +25,19 @@ public class TripActivity extends AppCompatActivity /*implements OnMapReadyCallb
     ListView listUOPP;
     ArrayList <String> arrayBuildings;
     ArrayAdapter <String> adapterBuildings;
-    //InputStream inputStream = getResources().openRawResource(R.raw.buildings);
-    //CSVFile csvFile = new CSVFile(inputStream);
-    //List buildings = csvFile.read();
+
+    CSVFile csvFile;
+    List buildings;
+
 
     //private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
+        InputStream inputStream = getResources().openRawResource(R.raw.buildings);
+        csvFile = new CSVFile(inputStream);
+        List buildings = csvFile.read();
         searchUOPP = findViewById(R.id.searchUOP);
         listUOPP = findViewById(R.id.listUOP);
         listUOPP.setVisibility(View.GONE);
@@ -42,7 +46,7 @@ public class TripActivity extends AppCompatActivity /*implements OnMapReadyCallb
         //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
         //        .findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);
-        //adapterBuildings = new ArrayAdapter <>(this,android.R.layout.simple_list_item_1, buildings);
+        adapterBuildings = new ArrayAdapter <>(this,android.R.layout.simple_list_item_1,buildings);
         listUOPP.setAdapter(adapterBuildings);
         searchUOPP.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
