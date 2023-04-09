@@ -11,14 +11,16 @@ import android.view.View;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
+
+ */
+public class TripActivity extends AppCompatActivity /*implements OnMapReadyCallback */{
     SearchView searchUOPP;
     ListView listUOPP;
     ArrayList <String> arrayBuildings;
@@ -27,7 +29,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     //CSVFile csvFile = new CSVFile(inputStream);
     //List buildings = csvFile.read();
 
-    private GoogleMap mMap;
+    //private GoogleMap mMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +39,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         listUOPP.setVisibility(View.GONE);
         arrayBuildings = new ArrayList <>();
         arrayBuildings.add("Baun Hall");
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        //        .findFragmentById(R.id.map);
+        //mapFragment.getMapAsync(this);
         //adapterBuildings = new ArrayAdapter <>(this,android.R.layout.simple_list_item_1, buildings);
         listUOPP.setAdapter(adapterBuildings);
         searchUOPP.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -56,7 +58,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
-
+/*
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -67,5 +69,5 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .position(sydney)
                 .title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
+    }*/
 }
