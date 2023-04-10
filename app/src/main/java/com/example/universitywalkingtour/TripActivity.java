@@ -35,6 +35,8 @@ public class TripActivity extends AppCompatActivity /*implements OnMapReadyCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
+        getSupportActionBar().setTitle("UOP Walk");
+
         InputStream inputStream = getResources().openRawResource(R.raw.buildings);
         csvFile = new CSVFile(inputStream);
         List buildings = csvFile.read();

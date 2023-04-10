@@ -20,14 +20,14 @@ public class CSVFile {
     }
 
     public List<String> read(){
-        List<String> resultList = new ArrayList<>();
+        List resultList = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         try {
             String csvLine;
             while ((csvLine = reader.readLine()) != null) {
-                String[] row = csvLine.split(",");
-                Log.i("Row",row[0]);
-                resultList.add(Arrays.asList(row));
+               // String[] row = csvLine.split();
+               // Log.i("Row",row[0]);
+                resultList.add(csvLine);
             }
         }
         catch (IOException ex) {

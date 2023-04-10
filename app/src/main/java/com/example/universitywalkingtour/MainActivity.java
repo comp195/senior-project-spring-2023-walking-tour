@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getSupportActionBar().setTitle("UOP Walk");
+
         VideoView videoView = findViewById(R.id.videoView);
         String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.video_instructions;
         Uri uri = Uri.parse(videoPath);
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent toStart = new Intent(MainActivity.this, TripActivity.class);
                 startActivity(toStart);
+
+
 
             }
         });

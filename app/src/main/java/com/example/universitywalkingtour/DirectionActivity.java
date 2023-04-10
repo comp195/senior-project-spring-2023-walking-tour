@@ -46,6 +46,8 @@ public class DirectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
 
+        getSupportActionBar().setTitle("UOP Walk");
+
         AddressText = findViewById(R.id.addressText);
         LocationButton = findViewById(R.id.locationButton);
 
