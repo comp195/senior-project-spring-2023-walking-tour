@@ -35,7 +35,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 public class DirectionActivity extends AppCompatActivity {
-
+    private double latitude;
+    private double longitude;
     private TextView AddressText;
     private Button LocationButton;
     private LocationRequest locationRequest;
@@ -59,6 +60,7 @@ public class DirectionActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 getCurrentLocation();
+
             }
         });
 
@@ -118,10 +120,16 @@ public class DirectionActivity extends AppCompatActivity {
                                     if (locationResult != null && locationResult.getLocations().size() >0){
 
                                         int index = locationResult.getLocations().size() - 1;
-                                        double latitude = locationResult.getLocations().get(index).getLatitude();
-                                        double longitude = locationResult.getLocations().get(index).getLongitude();
+                                        latitude = locationResult.getLocations().get(index).getLatitude();
+                                        longitude = locationResult.getLocations().get(index).getLongitude();
+
 
                                         AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
+
+                                        Intent intent = new Intent(DirectionActivity.this,DirectionSearchActivity.class);
+                                        intent.putExtra("latitude",latitude);
+                                        intent.putExtra("longitude", longitude);
+                                        startActivity(intent);
                                     }
                                 }
                             }, Looper.getMainLooper());
