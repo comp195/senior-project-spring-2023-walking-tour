@@ -12,15 +12,16 @@ import java.util.Map;
 public class DirectionSearch {
     InputStream inputStream2;
     private Map<String, Coordinates> locationData;
+    List<Building> buildings = new ArrayList<>();
 
     public DirectionSearch(InputStream inputStream2) {
         locationData = new HashMap<>();
         this.inputStream2 = inputStream2;
-        readCSV();
+       //readCSV();
     }
 
     public List<Building> readCSV() {
-        List<Building> buildings = new ArrayList<>();
+
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream2));
         try {
             String line;
@@ -48,6 +49,15 @@ public class DirectionSearch {
             System.err.println("Error reading CSV input stream: " + e.getMessage());
         }
         return buildings;
+    }
+
+    public double[] getBuildingCoordinates(String name) {
+        for (Building building : buildings) {
+            if (building.getName().equals(name)) {
+                return new double[] {building.getLatitude(), building.getLongitude()};
+            }
+        }
+        return null;
     }
 
     public Coordinates getCoordinates(String location) {
