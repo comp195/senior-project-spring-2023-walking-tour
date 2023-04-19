@@ -24,11 +24,12 @@ public class DirectionSearch {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream2));
         try {
             String line;
+
             while ((line = br.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(",(?![^(]*\\))");
                 if (parts.length == 2) {
                     String name = parts[0].trim().replaceAll("^\"|\"$", "");
-                    String coordinates = parts[1].trim().replaceAll("^\\(|\\)$", "");
+                    String coordinates = parts[1].trim().replaceAll("[\\(\\)\"]", "");
                     //String[] coordinates = parts[1].trim().replaceAll("^\\(|\\)$", "").split(",\\s+");
                     String[] latLng = coordinates.split(",");
                     if (latLng.length == 2) {
@@ -37,7 +38,7 @@ public class DirectionSearch {
                         Building building = new Building(name, latitude, longitude);
                         buildings.add(building);
 
-                        // Populate locationData map with building name and coordinates
+
                         Coordinates buildingCoordinates = new Coordinates(latitude, longitude);
                         locationData.put(name, buildingCoordinates);
                     }
