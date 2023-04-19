@@ -44,7 +44,7 @@ public class TripActivity extends AppCompatActivity /*implements OnMapReadyCallb
         listUOPP = findViewById(R.id.listUOP);
         listUOPP.setVisibility(View.GONE);
         arrayBuildings = new ArrayList <>();
-        arrayBuildings.add("Baun Hall");
+       // arrayBuildings.add("Baun Hall");
         //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
         //        .findFragmentById(R.id.map);
         //mapFragment.getMapAsync(this);

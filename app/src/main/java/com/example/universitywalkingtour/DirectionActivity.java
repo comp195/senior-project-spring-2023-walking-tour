@@ -129,8 +129,8 @@ public class DirectionActivity extends AppCompatActivity {
                                         AddressText.setText("Latitude: "+ latitude + "\n" + "Longitude: "+ longitude);
 
                                         Intent intent = new Intent(DirectionActivity.this,DirectionSearchActivity.class);
-                                        intent.putExtra("latitude",latitude);
-                                        intent.putExtra("longitude", longitude);
+                                        intent.putExtra("source_latitude",latitude);
+                                        intent.putExtra("source_longitude", longitude);
                                         startActivity(intent);
                                     }
                                 }
