@@ -11,15 +11,31 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.universitywalkingtour.databinding.ActivityMapsBinding;
+import android.content.Intent;
+
+
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
+    public double dest_latitude;
+    public double dest_longitude;
+    public double source_latitude;
+    public double source_longitude;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+         dest_latitude = intent.getDoubleExtra("dest_latitude", 0.0);
+         dest_longitude = intent.getDoubleExtra("dest_longitude", 0.0);
+         source_latitude = intent.getDoubleExtra("source_latitude", 0.0);
+         source_longitude = intent.getDoubleExtra("source_longitude", 0.0);
+
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -43,9 +59,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng destination = new LatLng(dest_latitude, dest_longitude);
+        mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
+
+        // Add a marker for the source and move the camera
+        LatLng source = new LatLng(source_latitude, source_longitude);
+        mMap.addMarker(new MarkerOptions().position(source).title("Your Location"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(source));
     }
 }
