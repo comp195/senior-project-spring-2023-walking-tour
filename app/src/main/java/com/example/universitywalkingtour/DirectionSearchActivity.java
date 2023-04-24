@@ -95,7 +95,7 @@ public class DirectionSearchActivity extends AppCompatActivity {
                 intent.putExtra("source_longitude", source_longitude);
                 startActivity(intent);
 
-                startActivity(intent);
+                //startActivity(intent);
             }
         });
 
