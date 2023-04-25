@@ -21,25 +21,21 @@ public class DirectionSearch {
     }
 
     public List<Building> readCSV() {
-
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream2));
         try {
             String line;
-
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",(?![^(]*\\))");
-                if (parts.length == 2) {
+                if (parts.length == 3) {
                     String name = parts[0].trim().replaceAll("^\"|\"$", "");
                     String coordinates = parts[1].trim().replaceAll("[\\(\\)\"]", "");
-                    //String[] coordinates = parts[1].trim().replaceAll("^\\(|\\)$", "").split(",\\s+");
+                    String type = parts[2].trim().replaceAll("^\"|\"$", "");
                     String[] latLng = coordinates.split(",");
-                    if (latLng.length == 2) {
+                    if (latLng.length == 3) {
                         double latitude = Double.parseDouble(latLng[0].trim());
                         double longitude = Double.parseDouble(latLng[1].trim());
-                        Building building = new Building(name, latitude, longitude);
+                        Building building = new Building(name, type, latitude, longitude);
                         buildings.add(building);
-
-
                         Coordinates buildingCoordinates = new Coordinates(latitude, longitude);
                         locationData.put(name, buildingCoordinates);
                     }
