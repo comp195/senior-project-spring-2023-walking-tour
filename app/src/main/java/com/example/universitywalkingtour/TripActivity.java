@@ -46,7 +46,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         allBuildings = directionSearch.readCSV();
 
         //Map init
-
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         //Selection Window
         AlertDialog.Builder selectionWindowBuilder = new AlertDialog.Builder(TripActivity.this);
