@@ -16,9 +16,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         getSupportActionBar().setTitle("UOP Walk");
 
+        //Video
         VideoView videoView = findViewById(R.id.videoView);
         String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.video_instructions;
         Uri uri = Uri.parse(videoPath);
@@ -27,24 +27,23 @@ public class MainActivity extends AppCompatActivity {
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
 
+        //Trip Mode button
         startTrip = (Button)findViewById(R.id.button_trip);
-        startDirecting = (Button)findViewById(R.id.button_directing);
         startTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toStart = new Intent(MainActivity.this, TripActivity.class);
                 startActivity(toStart);
-
-
-
             }
         });
+
+        //Directing Mode button
+        startDirecting = (Button)findViewById(R.id.button_directing);
         startDirecting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent toStart = new Intent(MainActivity.this, DirectionActivity.class);
                 startActivity(toStart);
-
             }
         });
     }

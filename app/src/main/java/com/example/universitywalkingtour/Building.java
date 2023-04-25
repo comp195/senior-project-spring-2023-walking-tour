@@ -2,6 +2,7 @@ package com.example.universitywalkingtour;
 
 public class Building {
     private String name;
+    private String type;
     private double latitude;
     private double longitude;
 
