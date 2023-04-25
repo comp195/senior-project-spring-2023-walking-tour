@@ -31,7 +31,7 @@ public class DirectionSearch {
                     String coordinates = parts[1].trim().replaceAll("[\\(\\)\"]", "");
                     String type = parts[2].trim().replaceAll("^\"|\"$", "");
                     String[] latLng = coordinates.split(",");
-                    if (latLng.length == 3) {
+                    if (latLng.length == 2) {
                         double latitude = Double.parseDouble(latLng[0].trim());
                         double longitude = Double.parseDouble(latLng[1].trim());
                         Building building = new Building(name, type, latitude, longitude);

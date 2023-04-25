@@ -2,7 +2,6 @@ package com.example.universitywalkingtour;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -20,15 +19,34 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
+    //Lists of buildings
+    List<Building> allBuildings;
+    ArrayList<Building> selectedBuildings;
+
+    //Read File
+    DirectionSearch directionSearch;
+
+    //Map
+    private GoogleMap mMap;
+
     //Selection Window
     String buildingTypes[] = {"Academic", "Landscape", "Utility", "Dorm", "Office"};
     boolean[] selectedItems = {false, false, false, false, false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //init
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
         getSupportActionBar().setTitle("UOP Walk");
+        ArrayList<Building> selectedBuildings = new ArrayList<>();
+        //Read File
+        InputStream inputStream = getResources().openRawResource(R.raw.building_coordinates);
+        directionSearch = new DirectionSearch(inputStream);
+        allBuildings = directionSearch.readCSV();
+
+        //Map init
+
 
         //Selection Window
         AlertDialog.Builder selectionWindowBuilder = new AlertDialog.Builder(TripActivity.this);
@@ -42,7 +60,14 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
         selectionWindowBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
+            public void onClick(DialogInterface dialogInterface, int which) {
+                for(int i = 0; i < allBuildings.size(); i++){
+                    for(int j = 0; j < selectedItems.length; j++){
+                        if(selectedItems[j] == true && allBuildings.get(i).getType().equals(buildingTypes[j])){
+                            selectedBuildings.add(allBuildings.get(i));
+                        }
+                    }
+                }
                 dialogInterface.dismiss();
             }
         });
@@ -53,6 +78,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
+        mMap = googleMap;
     }
 }
