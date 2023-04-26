@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -26,10 +28,14 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
 public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -43,6 +49,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Map
     private GoogleMap mMap;
     private LocationRequest locationRequest;
+    private double curr_latitude;
+    private double curr_longitude;
 
     //Selection Window
     String buildingTypes[] = {"Academic", "Landscape", "Utility", "Dorm", "Office"};
@@ -88,6 +96,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
                 //Ask location permission
                 getCurrentLocation();
+                moveToCurrentLocation();
                 dialogInterface.dismiss();
             }
         });
@@ -114,10 +123,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             .removeLocationUpdates(this);
                                     if (locationResult != null && locationResult.getLocations().size() >0){
                                         int index = locationResult.getLocations().size() - 1;
-                                        double latitude;
-                                        double longitude;
-                                        latitude = locationResult.getLocations().get(index).getLatitude();
-                                        longitude = locationResult.getLocations().get(index).getLongitude();
+
+                                        curr_latitude = locationResult.getLocations().get(index).getLatitude();
+                                        curr_longitude = locationResult.getLocations().get(index).getLongitude();
                                     }
                                 }
                             }, Looper.getMainLooper());
@@ -166,6 +174,24 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                             //Device does not have location
                             break;
                     }
+                }
+            }
+        });
+    }
+
+    private void moveToCurrentLocation() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
+            return;
+        }
+        FusedLocationProviderClient fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 15); // Change the '15' to your desired zoom level
+                    mMap.animateCamera(cameraUpdate);
                 }
             }
         });
