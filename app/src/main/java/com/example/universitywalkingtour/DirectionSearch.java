@@ -27,15 +27,16 @@ public class DirectionSearch {
             int id = 0;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",(?![^(]*\\))");
-                if (parts.length == 3) {
+                if (parts.length == 4) {
                     String name = parts[0].trim().replaceAll("^\"|\"$", "");
                     String coordinates = parts[1].trim().replaceAll("[\\(\\)\"]", "");
                     String type = parts[2].trim().replaceAll("^\"|\"$", "");
+                    String audioFileName = parts[3].trim().replaceAll("^\"|\"$", "");
                     String[] latLng = coordinates.split(",");
                     if (latLng.length == 2) {
                         double latitude = Double.parseDouble(latLng[0].trim());
                         double longitude = Double.parseDouble(latLng[1].trim());
-                        Building building = new Building(id, name, type, latitude, longitude);
+                        Building building = new Building(id, name, type, latitude, longitude, audioFileName);
                         buildings.add(building);
                         Coordinates buildingCoordinates = new Coordinates(latitude, longitude);
                         locationData.put(name, buildingCoordinates);

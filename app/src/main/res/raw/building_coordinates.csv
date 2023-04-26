@@ -1,86 +1,86 @@
-McConchie Hall,"(37.9801873, -121.3060194)",Office
-Burns Tower,"(37.9807982, -121.3085394)",Landscape
-Buck Memorial Hall,"(37.9801326, -121.3086534)",Utility
-Faye Spanos Concert Hall,"(37.9800319, -121.3079634)",Utility
-Rehearsal Hall,"(37.9795838, -121.3086323)",Utility
-Recital Hall,"(37.9797808, -121.3087887)",Null
-William Knox Holt Memorial Library,"(37.9799870, -121.3094057)",Academic
-Knoles Lawn,"(37.9804894, -121.3092659)",Landscape
-Eberhardt School of Business,"(37.9810713, -121.3091685)",Academic
-Westgate Management Center,"(37.9810713, -121.3091685)",Office
-Admissions Office,"(37.9804765, -121.3098132)",Office
-Knoles Hall,"(37.9804765, -121.3098132)",Academic
-Registrar,"(37.9804765, -121.3098132)",Office
-McCaffrey Center,"(37.9805154, -121.3111796)",Dorm
-Career Resource Center,"(37.9805154, -121.3111796)",Office
-Disability Services,"(37.9803657, -121.3114237)",Office
-The Grove,"(37.9804112, -121.3111333)",Utility
-Anderson Hall,"(37.9800451, -121.3107552)",Academic
-President's Room,"(37.9800874, -121.3104491)",Office
-Regents Dining Room,"(37.9800874, -121.3104491)",Utility
-Office of the President,"(37.9804228,-121.3105279)",Office
-Office of the Provost,"(37.9805256, -121.3106104)",Office
-Baun Hall,"(37.9800216, -121.3110489)",Academic
-Hydraulics Laboratory,"(37.9800493, -121.3113121)",Academic
-Finance Center,"(37.9800150, -121.3116812)",Office
-Southwest Hall,"(37.9792744, -121.3108221)",Dorm
-Khoury Hall,"(37.9796819, -121.3111034)",Academic
-Human Resources,"(37.9801873, -121.3060194)",Office
-Engineering and Computer Science,"(37.9789205, -121.3111483)",Academic
-Tower View Apartments,"(37.9789590, -121.3087216)",Dorm
-Colliver Hall,"(37.9816683, -121.3087264)",Utility
-Grace Covell Hall,"(37.9815360, -121.3099063)",Dorm
-Hand Hall,"(37.9809965, -121.3107371)",Academic
-Office of Marketying and Communications,"(37.9809965, -121.3107371)",Office
-Office of Student Life,"(37.9809965, -121.3107371)",Office
-Delta Delta Delta,"(37.9824299, -121.3095908)",Dorm
-Kappa Alpha Theta,"(37.9822829, -121.3099220)",Dorm
-Delta Gamma,"(37.9821043, -121.3098520)",Dorm
-Beta Theta,"(37.9820480, -121.3108072)",Dorm
-Alpha Phi,"(37.9817991, -121.3111015)",Dorm
-Bookstore,"(37.9812487, -121.3124245)",Utility
-DeRosa University Center,"(37.9815216, -121.3121513)",Utility
-Baun Fitness Center,"(37.9805567, -121.3123323)",Utility
-Bannister Hall,"(37.9802645, -121.3124876",Academic
-Owen Hall,"(37.9801738, -121.3123917)",Academic
-Main Gymnasium,"(37.9799389, -121.3121590)",Utility
-College of Pacific,"(37.9787194, -121.3119271)",Academic
-Wendell Phillips Center,"(37.9791387, -121.3119860)",Academic
-John Ballantyne Hall,"(37.9800072, -121.3132253)",Dorm
-George Wilson Hall,"(37.9795961, -121.3130720)",Academic
-International Studies,"(37.9796199, -121.3130763)",Academic
-Jessie Ballantyne Hall,"(37.9793389, -121.3130119)",Dorm
-Bechtel International Center,"(37.9791542, -121.3127645)",Office
-Casa Jackson,"(37.9788287, -121.3127239)",Dorm
-Casa Werner,"(37.9785998, -121.3125513)",Dorm
-Carter House,"(37.9798477, -121.3136956)",Dorm
-Callison Hall,"(37.9794476, -121.3135876)",Utility
-Elebert Covell Hall,"(37.9791387, -121.3135356)",Office
-Raymond Great Hall,"(37.9792572, -121.3134896)",Dorm
-Raymond Lodge,"(37.9784276, -121.3131340)",Landscape
-Eiselen House,"(37.9795713, -121.3140620)",Dorm
-Ritter House,"(37.9791884, -121.3138386)",Dorm
-Wemyss Hall,"(37.9790267, -121.3138163)",Dorm
-Farley House,"(37.9786185, -121.3135156)",Dorm
-Price House,"(37.9783842, -121.3134587)",Dorm
-Gladys L. Benerd School of Education,"(37.9783654, -121.3111599)",Academic
-Biological Sciences Center,"(37.9771518, -121.3109753)",Academic
-Classroom Building,"(37.9763595, -121.3105047)",Academic
-Olson Hall,"(37.9757179, -121.3116503",Academic
-Biological Laboratories,"(37.9763219, -121.3116859)",Academic
-DeMarcus Brown Studio,"(37.9767937, -121.3122680)",Utility
-Alumni House,"(37.9775478, -121.3122103)",Dorm
-Vereschagin Alumni House,"(37.9775478, -121.3122103)",Dorm
-Long Theatre,"(37.9775950, -121.3129018",Utility
-Psychology Department,"(37.9763946, -121.3132282)",Academic
-Robb Family Garden,"(37.9763354, -121.3127454)",Landscape
-Engineering and Computer Science,"(37.9763870, -121.3139110)",Academic
-South Campus Gymnasium,"(37.9766287, -121.3140844)",Utility
-Alex G. Spanos Center,"(37.9766653, -121.3151069)",Utility
-Klein Family Field,"(37.9760586, -121.3151636)",Utility
-Pacific Aquatics Center,"(37.9774343, -121.3151569)",Utility
-Bill Simoni Field,"(37.9768423, -121.3148154)",Utility
-Pacific Arch,"(37.9801373, -121.3071134)",Landscape
-South Campus Lawn,"(37.9790443, -121.3107176)",Landscape
-Rose Garden,"(37.9806752, -121.3089898)",Landscape
-Pacific Card Office,"(37.9802619, -121.3108735)",Office
+McConchie Hall,"(37.9801873, -121.3060194)",Office,null
+Burns Tower,"(37.9807982, -121.3085394)",Landscape,null
+Buck Memorial Hall,"(37.9801326, -121.3086534)",Utility,null
+Faye Spanos Concert Hall,"(37.9800319, -121.3079634)",Utility,null
+Rehearsal Hall,"(37.9795838, -121.3086323)",Utility,null
+Recital Hall,"(37.9797808, -121.3087887)",Null,null
+William Knox Holt Memorial Library,"(37.9799870, -121.3094057)",Academic,null
+Knoles Lawn,"(37.9804894, -121.3092659)",Landscape,null
+Eberhardt School of Business,"(37.9810713, -121.3091685)",Academic,null
+Westgate Management Center,"(37.9810713, -121.3091685)",Office,null
+Admissions Office,"(37.9804765, -121.3098132)",Office,null
+Knoles Hall,"(37.9804765, -121.3098132)",Academic,uopwalk_30
+Registrar,"(37.9804765, -121.3098132)",Office,null
+McCaffrey Center,"(37.9805154, -121.3111796)",Dorm,uopwalk_50
+Career Resource Center,"(37.9805154, -121.3111796)",Office,uopwalk_55
+Disability Services,"(37.9803657, -121.3114237)",Office,uopwalk_52
+The Grove,"(37.9804112, -121.3111333)",Utility,uopwalk_53
+Anderson Hall,"(37.9800451, -121.3107552)",Academic,null
+President's Room,"(37.9800874, -121.3104491)",Office,uopwalk_40
+Regents Dining Room,"(37.9800874, -121.3104491)",Utility,null
+Office of the President,"(37.9804228,-121.3105279)",Office,null
+Office of the Provost,"(37.9805256, -121.3106104)",Office,null
+Baun Hall,"(37.9800216, -121.3110489)",Academic,null
+Hydraulics Laboratory,"(37.9800493, -121.3113121)",Academic,null
+Finance Center,"(37.9800150, -121.3116812)",Office,null
+Southwest Hall,"(37.9792744, -121.3108221)",Dorm,null
+Khoury Hall,"(37.9796819, -121.3111034)",Academic,null
+Human Resources,"(37.9801873, -121.3060194)",Office,null
+Engineering and Computer Science,"(37.9789205, -121.3111483)",Academic,null
+Tower View Apartments,"(37.9789590, -121.3087216)",Dorm,null
+Colliver Hall,"(37.9816683, -121.3087264)",Utility,null
+Grace Covell Hall,"(37.9815360, -121.3099063)",Dorm,null
+Hand Hall,"(37.9809965, -121.3107371)",Academic,null
+Office of Marketying and Communications,"(37.9809965, -121.3107371)",Office,null
+Office of Student Life,"(37.9809965, -121.3107371)",Office,null
+Delta Delta Delta,"(37.9824299, -121.3095908)",Dorm,null
+Kappa Alpha Theta,"(37.9822829, -121.3099220)",Dorm,null
+Delta Gamma,"(37.9821043, -121.3098520)",Dorm,null
+Beta Theta,"(37.9820480, -121.3108072)",Dorm,null
+Alpha Phi,"(37.9817991, -121.3111015)",Dorm,null
+Bookstore,"(37.9812487, -121.3124245)",Utility,null
+DeRosa University Center,"(37.9815216, -121.3121513)",Utility,uopwalk_60
+Baun Fitness Center,"(37.9805567, -121.3123323)",Utility,null
+Bannister Hall,"(37.9802645, -121.3124876",Academic,null
+Owen Hall,"(37.9801738, -121.3123917)",Academic,null
+Main Gymnasium,"(37.9799389, -121.3121590)",Utility,null
+College of Pacific,"(37.9787194, -121.3119271)",Academic,null
+Wendell Phillips Center,"(37.9791387, -121.3119860)",Academic,null
+John Ballantyne Hall,"(37.9800072, -121.3132253)",Dorm,null
+George Wilson Hall,"(37.9795961, -121.3130720)",Academic,null
+International Studies,"(37.9796199, -121.3130763)",Academic,null
+Jessie Ballantyne Hall,"(37.9793389, -121.3130119)",Dorm,null
+Bechtel International Center,"(37.9791542, -121.3127645)",Office,null
+Casa Jackson,"(37.9788287, -121.3127239)",Dorm,null
+Casa Werner,"(37.9785998, -121.3125513)",Dorm,null
+Carter House,"(37.9798477, -121.3136956)",Dorm,null
+Callison Hall,"(37.9794476, -121.3135876)",Utility,null
+Elebert Covell Hall,"(37.9791387, -121.3135356)",Office,null
+Raymond Great Hall,"(37.9792572, -121.3134896)",Dorm,null
+Raymond Lodge,"(37.9784276, -121.3131340)",Landscape,null
+Eiselen House,"(37.9795713, -121.3140620)",Dorm,null
+Ritter House,"(37.9791884, -121.3138386)",Dorm,null
+Wemyss Hall,"(37.9790267, -121.3138163)",Dorm,null
+Farley House,"(37.9786185, -121.3135156)",Dorm,null
+Price House,"(37.9783842, -121.3134587)",Dorm,null
+Gladys L. Benerd School of Education,"(37.9783654, -121.3111599)",Academic,null
+Biological Sciences Center,"(37.9771518, -121.3109753)",Academic,null
+Classroom Building,"(37.9763595, -121.3105047)",Academic,null
+Olson Hall,"(37.9757179, -121.3116503",Academic,null
+Biological Laboratories,"(37.9763219, -121.3116859)",Academic,null
+DeMarcus Brown Studio,"(37.9767937, -121.3122680)",Utility,null
+Alumni House,"(37.9775478, -121.3122103)",Dorm,null
+Vereschagin Alumni House,"(37.9775478, -121.3122103)",Dorm,null
+Long Theatre,"(37.9775950, -121.3129018",Utility,null
+Psychology Department,"(37.9763946, -121.3132282)",Academic,null
+Robb Family Garden,"(37.9763354, -121.3127454)",Landscape,null
+Engineering and Computer Science,"(37.9763870, -121.3139110)",Academic,null
+South Campus Gymnasium,"(37.9766287, -121.3140844)",Utility,null
+Alex G. Spanos Center,"(37.9766653, -121.3151069)",Utility,null
+Klein Family Field,"(37.9760586, -121.3151636)",Utility,null
+Pacific Aquatics Center,"(37.9774343, -121.3151569)",Utility,null
+Bill Simoni Field,"(37.9768423, -121.3148154)",Utility,null
+Pacific Arch,"(37.9801373, -121.3071134)",Landscape,null
+South Campus Lawn,"(37.9790443, -121.3107176)",Landscape,null
+Rose Garden,"(37.9806752, -121.3089898)",Landscape,null
+Pacific Card Office,"(37.9802619, -121.3108735)",Office,null

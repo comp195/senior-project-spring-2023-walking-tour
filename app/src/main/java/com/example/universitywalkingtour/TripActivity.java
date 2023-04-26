@@ -94,6 +94,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                         }
                     }
                 }
+                setBuildingAudioFileResourceIDs();
+
                 //Ask location permission
                 getCurrentLocation();
                 moveToCurrentLocation();
@@ -123,7 +125,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                                             .removeLocationUpdates(this);
                                     if (locationResult != null && locationResult.getLocations().size() >0){
                                         int index = locationResult.getLocations().size() - 1;
-
                                         curr_latitude = locationResult.getLocations().get(index).getLatitude();
                                         curr_longitude = locationResult.getLocations().get(index).getLongitude();
                                     }
@@ -195,5 +196,14 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+    }
+
+    private void setBuildingAudioFileResourceIDs() {
+        for(int i = 0; i < selectedBuildings.size(); i++){
+            if(selectedBuildings.get(i).getAudioFileName() != "null"){
+                selectedBuildings.get(i).setAudioFileResourceID(getResources().getIdentifier(selectedBuildings.get(i).getAudioFileName(), "raw", getPackageName()));
+                System.out.println(selectedBuildings.get(i).getAudioFileResourceID());
+            }
+        }
     }
 }
