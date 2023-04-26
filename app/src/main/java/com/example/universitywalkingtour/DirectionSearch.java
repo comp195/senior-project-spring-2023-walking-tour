@@ -24,6 +24,7 @@ public class DirectionSearch {
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream2));
         try {
             String line;
+            int id = 0;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(",(?![^(]*\\))");
                 if (parts.length == 3) {
@@ -34,10 +35,11 @@ public class DirectionSearch {
                     if (latLng.length == 2) {
                         double latitude = Double.parseDouble(latLng[0].trim());
                         double longitude = Double.parseDouble(latLng[1].trim());
-                        Building building = new Building(name, type, latitude, longitude);
+                        Building building = new Building(id, name, type, latitude, longitude);
                         buildings.add(building);
                         Coordinates buildingCoordinates = new Coordinates(latitude, longitude);
                         locationData.put(name, buildingCoordinates);
+                        id++;
                     }
                 }
             }
