@@ -11,6 +11,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.universitywalkingtour.databinding.ActivityMapsBinding;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.CameraUpdate;
+import androidx.databinding.DataBindingUtil;
+
+
 import android.content.Intent;
 
 
@@ -31,11 +36,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
-         dest_latitude = intent.getDoubleExtra("dest_latitude", 0.0);
-         dest_longitude = intent.getDoubleExtra("dest_longitude", 0.0);
-         source_latitude = intent.getDoubleExtra("source_latitude", 0.0);
-         source_longitude = intent.getDoubleExtra("source_longitude", 0.0);
-
+        dest_latitude = intent.getDoubleExtra("dest_latitude", 0.0);
+        dest_longitude = intent.getDoubleExtra("dest_longitude", 0.0);
+        source_latitude = intent.getDoubleExtra("source_latitude", 0.0);
+        source_longitude = intent.getDoubleExtra("source_longitude", 0.0);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -61,11 +65,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         LatLng destination = new LatLng(dest_latitude, dest_longitude);
         mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(destination));
 
-        // Add a marker for the source and move the camera
+        // Add a marker for the source
         LatLng source = new LatLng(source_latitude, source_longitude);
         mMap.addMarker(new MarkerOptions().position(source).title("Your Location"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(source));
+
+        // Set the camera position to show both markers
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+        builder.include(destination);
+        builder.include(source);
+        LatLngBounds bounds = builder.build();
+        int padding = 100; // offset from edges of the map in pixels
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(cu);
+
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
     }
+
 }
