@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+//push test
 public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
     //Lists of buildings
     List<Building> allBuildings;
