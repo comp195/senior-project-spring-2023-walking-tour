@@ -104,7 +104,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
-        String url = "https://maps.googleapis.com/maps/api/directions/json" +
+      /*  String url = "https://maps.googleapis.com/maps/api/directions/json" +
                 "?origin=" + source_latitude + "," + source_longitude +
                 "&destination=" + dest_latitude + "," + dest_longitude +
                 "&key=" + BuildConfig.MAPS_API_KEY;
@@ -157,7 +157,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         polylineOptions.addAll(polylinePoints);
         mMap.addPolyline(polylineOptions);
 
-
+*/
     }
 
 }
