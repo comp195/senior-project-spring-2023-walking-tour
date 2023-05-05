@@ -15,10 +15,14 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Properties;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -86,10 +90,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
-                if (locationResult == null) {
-                    return;
-                }
+            public void onLocationResult(@NonNull LocationResult locationResult) {
                 for (Location location : locationResult.getLocations()) {
                     // 更新 curr_longitude 和 curr_latitude 变量
                     curr_longitude = location.getLongitude();
@@ -139,14 +140,10 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             System.out.println(selectedBuildings.get(i).getName());
         }
         System.out.println("origin: " + curr_latitude + "," + curr_longitude);
-
-        Building end = selectedBuildings.get(selectedBuildings.size() - 1);
-
-        wayPoints = selectedBuildings.subList(0, selectedBuildings.size() - 1);
-        String apiKey = "AIzaSyCJLJ2SKUEYJg3yjLV2JTM5PbDCX89PUbc";
+        String apiKey = getApiKeyFromConfig();
         String baseUrl = "https://maps.googleapis.com/maps/api/directions/json?";
         String origin = "origin=" + curr_latitude + "," + curr_longitude;
-        String destination = "destination=" + end.getLatitude() + "," + end.getLongitude();
+        wayPoints = selectedBuildings.subList(0, selectedBuildings.size() - 1);
         StringBuilder waypointsParam = new StringBuilder("waypoints=");
         System.out.println("Way points: ");
         for (int i = 0; i < wayPoints.size(); i++) {
@@ -157,9 +154,12 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 waypointsParam.append("|");
             }
         }
+        Building end = selectedBuildings.get(selectedBuildings.size() - 1);
+        String destination = "destination=" + end.getLatitude() + "," + end.getLongitude();
         System.out.println("end: " + end.getName());
         String url = baseUrl + origin + "&" + destination + "&" + waypointsParam + "&key=" + apiKey + "&optimizeWaypoints=true&mode=bicycling";
         System.out.println(url);
+        System.out.println("Number of origin + waypoints + end: " + (1 + wayPoints.size() + 1));
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -195,7 +195,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
         requestQueue.add(jsonObjectRequest);
-
     }
 
     private void drawPolyline(List<LatLng> points) {
@@ -211,7 +210,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         getCurrentLocation();
-
     }
 
     private void getCurrentLocation() {
@@ -259,12 +257,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void moveToCurrentLocation() {
-
-
-                    LatLng currentLatLng = new LatLng(curr_latitude, curr_longitude);
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 15); // Change the '15' to your desired zoom level
-                    mMap.animateCamera(cameraUpdate);
-
+        LatLng currentLatLng = new LatLng(curr_latitude, curr_longitude);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 17); // Change the '15' to your desired zoom level
+        mMap.animateCamera(cameraUpdate);
     }
 
     @SuppressLint("DiscouragedApi")
@@ -275,5 +270,18 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 System.out.println(selectedBuildings.get(i).getAudioFileResourceID());
             }
         }
+    }
+
+    public String getApiKeyFromConfig() {
+        String apiKey = "";
+        try {
+            InputStream inputStream = getApplicationContext().getAssets().open("config.properties");
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            apiKey = properties.getProperty("API_KEY");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return apiKey;
     }
 }
