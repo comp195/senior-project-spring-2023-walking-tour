@@ -8,6 +8,7 @@ public class Building {
     private double longitude;
     private String audioFileName;
     private int audioFileResourceID;
+    private boolean isAudioPlayed;
 
     public Building(int id, String name, String type, double latitude, double longitude, String audioFileName) {
         this.id = id;
@@ -16,7 +17,8 @@ public class Building {
         this.latitude = latitude;
         this.longitude = longitude;
         this.audioFileName = audioFileName;
-        audioFileResourceID = -1;
+        this.audioFileResourceID = -1;
+        this.isAudioPlayed = false;
     }
     public int getID() {
         return id;
@@ -48,5 +50,13 @@ public class Building {
 
     public int getAudioFileResourceID() {
         return audioFileResourceID;
+    }
+
+    public void setIsAudioPlayed(boolean isAudioPlayed){
+        this.isAudioPlayed = isAudioPlayed;
+    }
+
+    public boolean getIsAudioPlayed() {
+        return this.isAudioPlayed;
     }
 }
