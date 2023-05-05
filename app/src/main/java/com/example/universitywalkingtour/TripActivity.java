@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Build;
@@ -18,6 +19,13 @@ import android.widget.Toast;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -34,16 +42,21 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.maps.android.PolyUtil;
 
-//push test
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
     //Lists of buildings
     List<Building> allBuildings;
     ArrayList<Building> selectedBuildings;
-
+    ArrayList<Building> wayPoints;
     //Read File
     DirectionSearch directionSearch;
 
@@ -63,7 +76,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trip);
         getSupportActionBar().setTitle("UOP Walk");
-        ArrayList<Building> selectedBuildings = new ArrayList<>();
+        selectedBuildings = new ArrayList<>();
+
         //Read File
         InputStream inputStream = getResources().openRawResource(R.raw.building_coordinates);
         directionSearch = new DirectionSearch(inputStream);
@@ -98,9 +112,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setBuildingAudioFileResourceIDs();
 
                 //Ask location permission
-                getCurrentLocation();
-                moveToCurrentLocation();
+
                 dialogInterface.dismiss();
+                showPolyLine();
             }
         });
         AlertDialog selectionWindow = selectionWindowBuilder.create();
@@ -108,9 +122,77 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         selectionWindow.show();
     }
 
+    private void showPolyLine() {
+        Building end = selectedBuildings.get(selectedBuildings.size() - 1);
+        List<Building> waypoints = selectedBuildings.subList(0, selectedBuildings.size() - 1);
+        String apiKey = "AIzaSyCJLJ2SKUEYJg3yjLV2JTM5PbDCX89PUbc";
+        String baseUrl = "https://maps.googleapis.com/maps/api/directions/json?";
+        String origin = "origin=" + curr_latitude + "," + curr_longitude;
+        String destination = "destination=" + end.getLatitude() + "," + end.getLongitude();
+        StringBuilder waypointsParam = new StringBuilder("waypoints=");
+        for (int i = 0; i < waypoints.size(); i++) {
+            Building waypoint = waypoints.get(i);
+            waypointsParam.append(waypoint.getLatitude()).append(",").append(waypoint.getLongitude());
+            if (i < waypoints.size() - 1) {
+                waypointsParam.append("|");
+            }
+        }
+        String url = baseUrl + origin + "&" + destination + "&" + waypointsParam + "&key=" + apiKey;
+        System.out.println(url);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray routes = response.getJSONArray("routes");
+                    if (routes.length() > 0) {
+                        JSONObject route = routes.getJSONObject(0);
+                        JSONArray legs = route.getJSONArray("legs");
+                        ArrayList<LatLng> polylinePoints = new ArrayList<>();
+                        for (int i = 0; i < legs.length(); i++) {
+                            JSONObject leg = legs.getJSONObject(i);
+                            JSONArray steps = leg.getJSONArray("steps");
+                            for (int j = 0; j < steps.length(); j++) {
+                                JSONObject step = steps.getJSONObject(j);
+                                JSONObject polyline = step.getJSONObject("polyline");
+                                String encodedPoints = polyline.getString("points");
+                                List<LatLng> decodedPoints = PolyUtil.decode(encodedPoints);
+                                polylinePoints.addAll(decodedPoints);
+                            }
+                        }
+                        drawPolyline(polylinePoints);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error sending polly request.");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+    private void drawPolyline(List<LatLng> points) {
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .addAll(points)
+                .width(10) // Polyline宽度
+                .color(Color.BLUE) // Polyline颜色
+                .geodesic(true); // 使用大地线插值
+        mMap.addPolyline(polylineOptions);
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        moveToCurrentLocation();
+        //getCurrentLocation();
+        System.out.println("Current latitude: " + curr_latitude);
+        System.out.println("Current longitude: " + curr_longitude);
     }
 
     private void getCurrentLocation() {
@@ -124,10 +206,11 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     super.onLocationResult(locationResult);
                                     LocationServices.getFusedLocationProviderClient(TripActivity.this)
                                             .removeLocationUpdates(this);
-                                    if (locationResult != null && locationResult.getLocations().size() >0){
+                                    if (locationResult != null && locationResult.getLocations().size() > 0){
                                         int index = locationResult.getLocations().size() - 1;
                                         curr_latitude = locationResult.getLocations().get(index).getLatitude();
                                         curr_longitude = locationResult.getLocations().get(index).getLongitude();
+
                                     }
                                 }
                             }, Looper.getMainLooper());
@@ -192,6 +275,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onSuccess(Location location) {
                 if (location != null) {
                     LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    curr_latitude = location.getLatitude();
+                    curr_longitude = location.getLongitude();
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 15); // Change the '15' to your desired zoom level
                     mMap.animateCamera(cameraUpdate);
                 }
