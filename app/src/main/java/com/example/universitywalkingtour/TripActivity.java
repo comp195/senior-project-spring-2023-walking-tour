@@ -48,6 +48,7 @@ import org.json.JSONObject;
 
 public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
     //Lists of buildings
+
     List<Building> allBuildings;
     List<Building> wayPoints;
     ArrayList<Building> selectedBuildings;
@@ -60,7 +61,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     private double curr_latitude;
     private double curr_longitude;
     private static final String TAG = "TripActivity";
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    public static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
 
@@ -97,6 +98,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                     curr_latitude = location.getLatitude();
                     Log.d(TAG, "Latitude: " + curr_latitude + ", Longitude: " + curr_longitude);
                     moveToCurrentLocation();
+
                 }
             }
         };

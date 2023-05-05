@@ -104,6 +104,9 @@ public class DirectionActivity extends AppCompatActivity {
 
     private void getCurrentLocation() {
 
+        if (!isGPSEnabled()){
+            turnOnGPS();
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(DirectionActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
