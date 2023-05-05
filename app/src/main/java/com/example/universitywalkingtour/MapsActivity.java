@@ -1,10 +1,20 @@
 package com.example.universitywalkingtour;
 
 import androidx.fragment.app.FragmentActivity;
+import com.android.volley.Response; // Import for Volley's Response class
+// import com.google.android.gms.common.api.Response; // Remove or comment out this line
+
 
 import android.graphics.Color;
 import android.os.Bundle;
 import java.net.HttpURLConnection;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+//import com.google.android.gms.common.api.Response;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,6 +33,7 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -94,43 +105,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         int padding = 50; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         mMap.animateCamera(cu);
-
-        //mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
-        mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+        mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
+        showPolyLine();
+       // mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
+        /*mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
             }
-        });
+        });*/
 
 
       /*  String url = "https://maps.googleapis.com/maps/api/directions/json" +
                 "?origin=" + source_latitude + "," + source_longitude +
                 "&destination=" + dest_latitude + "," + dest_longitude +
                 "&key=" + BuildConfig.MAPS_API_KEY;
-
         URL urlObject = new URL(url);
         try {
             urlObject = new URL(url);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         HttpURLConnection connection = urlObject.openConnection();
         connection.setRequestMethod("GET");
         connection.connect();
-
         InputStream inputStream = connection.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         while ((line = reader.readLine()) != null) {
             stringBuilder.append(line);
         }
         String response = stringBuilder.toString();
-
-
         JSONObject jsonObject = new JSONObject(response);
         JSONArray routesArray = jsonObject.getJSONArray("routes");
         JSONObject routeObject = routesArray.getJSONObject(0);
@@ -140,8 +146,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String distance = distanceObject.getString("text");
         JSONObject durationObject = legObject.getJSONObject("duration");
         String duration = durationObject.getString("text");
-
-
         JSONArray stepsArray = legObject.getJSONArray("steps");
         List<LatLng> polylinePoints = new ArrayList<>();
         for (int i = 0; i < stepsArray.length(); i++) {
@@ -156,8 +160,61 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         polylineOptions.width(10);
         polylineOptions.addAll(polylinePoints);
         mMap.addPolyline(polylineOptions);
-
 */
     }
+    private void showPolyLine() {
+        String apiKey = "AIzaSyCJLJ2SKUEYJg3yjLV2JTM5PbDCX89PUbc";
+        String baseUrl = "https://maps.googleapis.com/maps/api/directions/json?";
+        String origin = "origin=" + source_latitude + "," + source_longitude;
+        String destination = "destination=" + dest_latitude + "," + dest_longitude;
+        StringBuilder waypointsParam = new StringBuilder("waypoints=");
 
+        String url = baseUrl + origin + "&" + destination + "&" + waypointsParam + "&key=" + apiKey;
+        System.out.println(url);
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray routes = response.getJSONArray("routes");
+                    if (routes.length() > 0) {
+                        JSONObject route = routes.getJSONObject(0);
+                        JSONArray legs = route.getJSONArray("legs");
+                        ArrayList<LatLng> polylinePoints = new ArrayList<>();
+                        for (int i = 0; i < legs.length(); i++) {
+                            JSONObject leg = legs.getJSONObject(i);
+                            JSONArray steps = leg.getJSONArray("steps");
+                            for (int j = 0; j < steps.length(); j++) {
+                                JSONObject step = steps.getJSONObject(j);
+                                JSONObject polyline = step.getJSONObject("polyline");
+                                String encodedPoints = polyline.getString("points");
+                                List<LatLng> decodedPoints = PolyUtil.decode(encodedPoints);
+                                polylinePoints.addAll(decodedPoints);
+                            }
+                        }
+                        drawPolyline(polylinePoints);
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                System.out.println("Error sending polly request.");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
+    private void drawPolyline(List<LatLng> points) {
+        PolylineOptions polylineOptions = new PolylineOptions()
+                .addAll(points)
+                .width(10) // Polyline宽度
+                .color(Color.BLUE) // Polyline颜色
+                .geodesic(true); // 使用大地线插值
+        mMap.addPolyline(polylineOptions);
+    }
 }
