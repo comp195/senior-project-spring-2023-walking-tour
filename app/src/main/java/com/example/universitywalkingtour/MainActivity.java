@@ -79,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent toStart = new Intent(MainActivity.this, TripActivity.class);
+                videoView.stopPlayback();
+                mp.stop();
                 startActivity(toStart);
             }
         });
