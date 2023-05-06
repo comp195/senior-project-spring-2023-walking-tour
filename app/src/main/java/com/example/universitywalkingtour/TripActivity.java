@@ -38,6 +38,9 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -67,7 +70,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
-    private Marker userMarker;
+    //private Marker userMarker;
+    GroundOverlayOptions groundOverlayOptions;
+    GroundOverlay groundOverlay;
 
     //Selection Window
     private String[] buildingTypes = {"Academic", "Landscape", "Utility", "Dorm", "Office"};
@@ -374,11 +379,19 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     private void updateUserMarker() {
-        if(userMarker != null){
-            userMarker.remove();
-            userMarker = null;
+        LatLng overlayCenter = new LatLng(curr_latitude, curr_longitude);
+        float overlayWidth = 24f;
+        float overlayHeight = 24f;
+        if(groundOverlayOptions == null){
+            groundOverlayOptions = new GroundOverlayOptions()
+                    .image(BitmapDescriptorFactory.fromResource(R.drawable.user_icon))
+                    .position(overlayCenter, overlayWidth, overlayHeight);
+            groundOverlay = mMap.addGroundOverlay(groundOverlayOptions);
         }
-        userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(curr_latitude, curr_longitude)).title("Your Location"));
+        else{
+            groundOverlay.setPosition(overlayCenter);
+        }
+        //userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(curr_latitude, curr_longitude)).title("Your Location"));
     }
 
     @SuppressLint("DiscouragedApi")
