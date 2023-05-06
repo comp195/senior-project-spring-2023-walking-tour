@@ -51,13 +51,13 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MediaPlayer buildingRecordingPlayer;
 
     //Lists of buildings
-    List<Building> allBuildings;
-    List<Building> wayPoints;
-    List<Building> optimizedRoute;
-    ArrayList<Building> selectedBuildings;
-    ArrayList<Marker> markers;
+    private List<Building> allBuildings;
+    private List<Building> wayPoints;
+    private List<Building> optimizedRoute;
+    private ArrayList<Building> selectedBuildings;
+    private ArrayList<Marker> markers;
     //Read File
-    DirectionSearch directionSearch;
+    private DirectionSearch directionSearch;
 
     //Map
     private GoogleMap mMap;
@@ -70,8 +70,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     private Marker userMarker;
 
     //Selection Window
-    String[] buildingTypes = {"Academic", "Landscape", "Utility", "Dorm", "Office"};
-    boolean[] selectedItems = {false, false, false, false, false};
+    private String[] buildingTypes = {"Academic", "Landscape", "Utility", "Dorm", "Office"};
+    private boolean[] selectedItems = {false, false, false, false, false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +105,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                     moveToCurrentLocation();
                     updateUserMarker();
                     checkIfNearAnyBuilding();
+                    if(selectedBuildings.size() != 0){
+                        Toast.makeText(TripActivity.this, "Next destination: " + findTheNearestBuildingFromStart().getName(), Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         };
