@@ -102,7 +102,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                     curr_longitude = location.getLongitude();
                     curr_latitude = location.getLatitude();
                     Log.d(TAG, "Latitude: " + curr_latitude + ", Longitude: " + curr_longitude);
-                    moveToCurrentLocation();
                     updateUserMarker();
                     checkIfNearAnyBuilding();
                     if(selectedBuildings.size() != 0){
@@ -137,6 +136,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 setBuildingAudioFileResourceIDs();
                 dialogInterface.dismiss();
                 //showPolyLine
+                moveToCurrentLocation();
                 showPolyLine();
                 addBuildingMarkers();
                 //play audio introduction
@@ -208,6 +208,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         List<Building> remainingBuildings = new ArrayList<>(selectedBuildings);
         Building currentBuilding = findTheNearestBuildingFromStart();
+        optimizedRoute.add(currentBuilding);
         remainingBuildings.remove(currentBuilding);
         while (!remainingBuildings.isEmpty()) {
             double minDistance = Double.MAX_VALUE;
@@ -307,6 +308,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .width(8) // Polyline宽度
                 .color(Color.BLUE) // Polyline颜色
                 .geodesic(true); // 使用大地线插值
+        System.out.println("Made this far?");
         mMap.addPolyline(polylineOptions);
     }
 
