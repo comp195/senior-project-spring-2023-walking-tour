@@ -382,6 +382,9 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(!Objects.equals(selectedBuildings.get(i).getAudioFileName(), "null")){
                 selectedBuildings.get(i).setAudioFileResourceID(getResources().getIdentifier(selectedBuildings.get(i).getAudioFileName(), "raw", getPackageName()));
             }
+            else{
+                selectedBuildings.get(i).setIsAudioPlayed(true);
+            }
         }
     }
 
