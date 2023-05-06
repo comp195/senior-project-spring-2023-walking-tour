@@ -11,18 +11,17 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -40,6 +39,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
 import org.json.JSONArray;
@@ -47,11 +48,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TripActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private MediaPlayer buildingRecordingPlayer;
+
     //Lists of buildings
     List<Building> allBuildings;
     List<Building> wayPoints;
     ArrayList<Building> selectedBuildings;
-
+    ArrayList<Marker> markers;
     //Read File
     DirectionSearch directionSearch;
 
@@ -63,6 +66,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
+    private Marker userMarker;
 
     //Selection Window
     String[] buildingTypes = {"Academic", "Landscape", "Utility", "Dorm", "Office"};
@@ -75,7 +79,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_trip);
         Objects.requireNonNull(getSupportActionBar()).setTitle("UOP Walk");
         selectedBuildings = new ArrayList<>();
-
+        markers = new ArrayList<>();
         //Read File
         InputStream inputStream = getResources().openRawResource(R.raw.building_coordinates);
         directionSearch = new DirectionSearch(inputStream);
@@ -97,6 +101,8 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                     curr_latitude = location.getLatitude();
                     Log.d(TAG, "Latitude: " + curr_latitude + ", Longitude: " + curr_longitude);
                     moveToCurrentLocation();
+                    updateUserMarker();
+                    checkIfNearAnyBuilding();
                 }
             }
         };
@@ -127,11 +133,65 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                 dialogInterface.dismiss();
                 //showPolyLine
                 showPolyLine();
+                addBuildingMarkers();
+                //play audio introduction
+                buildingRecordingPlayer = MediaPlayer.create(TripActivity.this, R.raw.uopwalk_01);
+                buildingRecordingPlayer.start();
             }
         });
         AlertDialog selectionWindow = selectionWindowBuilder.create();
         selectionWindow.setCanceledOnTouchOutside(false);
         selectionWindow.show();
+    }
+
+    private void addBuildingMarkers() {
+        for(int i = 0; i < selectedBuildings.size(); i++){
+            markers.add(mMap.addMarker(new MarkerOptions().position(new LatLng(selectedBuildings.get(i).getLatitude(), selectedBuildings.get(i).getLongitude())).title(selectedBuildings.get(i).getName())));
+        }
+    }
+
+    private void checkIfNearAnyBuilding() {
+        Building buildingToDel = null;
+        int buildingToDelIndex = -1;
+        for(int i = 0; i < selectedBuildings.size(); i++){
+            if(isUserNearCurrentDestination(curr_latitude, curr_longitude, selectedBuildings.get(i).getLatitude(), selectedBuildings.get(i).getLongitude())){
+                if(selectedBuildings.get(i).getAudioFileResourceID() != -1 && !buildingRecordingPlayer.isPlaying()){
+                    buildingRecordingPlayer = MediaPlayer.create(this, selectedBuildings.get(i).getAudioFileResourceID());
+                    buildingRecordingPlayer.start();
+                    buildingToDel = selectedBuildings.get(i);
+                }
+                for(int j = 0; j < markers.size(); j++){
+                    if(markers.get(j).getTitle().equals(selectedBuildings.get(i).getName()) && !buildingRecordingPlayer.isPlaying()){
+                        markers.get(j).remove();
+                        buildingToDelIndex = j;
+                        break;
+                    }
+                }
+                if(buildingToDel != null){
+                    selectedBuildings.remove(buildingToDel);
+                }
+                if(buildingToDelIndex != -1){
+                    markers.remove(markers.get(buildingToDelIndex));
+                }
+                break;
+            }
+        }
+    }
+    private boolean isUserNearCurrentDestination(double curr_latitude, double curr_longitude, double dest_latitude, double dest_longitude) {
+        double distance = calculateDistance(curr_latitude, curr_longitude, dest_latitude, dest_longitude);
+        return distance <= 20; // 判断用户是否在100米内
+    }
+
+    private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // 地球半径，单位为公里
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        double distance = R * c; // 距离，单位为公里
+        return distance * 1000; // 将距离转换为米
     }
 
     private void showPolyLine() {
@@ -254,12 +314,25 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onDestroy() {
         super.onDestroy();
         fusedLocationClient.removeLocationUpdates(locationCallback);
+        if (buildingRecordingPlayer != null) {
+            buildingRecordingPlayer.stop();
+            buildingRecordingPlayer.release();
+            buildingRecordingPlayer = null;
+        }
     }
 
     private void moveToCurrentLocation() {
         LatLng currentLatLng = new LatLng(curr_latitude, curr_longitude);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 17); // Change the '15' to your desired zoom level
         mMap.animateCamera(cameraUpdate);
+    }
+
+    private void updateUserMarker() {
+        if(userMarker != null){
+            userMarker.remove();
+            userMarker = null;
+        }
+        userMarker = mMap.addMarker(new MarkerOptions().position(new LatLng(curr_latitude, curr_longitude)).title("Your Location"));
     }
 
     @SuppressLint("DiscouragedApi")
