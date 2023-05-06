@@ -53,6 +53,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     //Lists of buildings
     List<Building> allBuildings;
     List<Building> wayPoints;
+    List<Building> optimizedRoute;
     ArrayList<Building> selectedBuildings;
     ArrayList<Marker> markers;
     //Read File
@@ -80,6 +81,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         Objects.requireNonNull(getSupportActionBar()).setTitle("UOP Walk");
         selectedBuildings = new ArrayList<>();
         markers = new ArrayList<>();
+        optimizedRoute = new ArrayList<>();
         //Read File
         InputStream inputStream = getResources().openRawResource(R.raw.building_coordinates);
         directionSearch = new DirectionSearch(inputStream);
@@ -177,6 +179,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
+
     private boolean isUserNearCurrentDestination(double curr_latitude, double curr_longitude, double dest_latitude, double dest_longitude) {
         double distance = calculateDistance(curr_latitude, curr_longitude, dest_latitude, dest_longitude);
         return distance <= 20; // 判断用户是否在100米内
@@ -194,32 +197,70 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         return distance * 1000; // 将距离转换为米
     }
 
-    private void showPolyLine() {
-        System.out.println("All selected buildings: ");
-        for(int i = 0; i < selectedBuildings.size(); i++){
+    private List<Building> nearestNeighborAlgorithm() {
+        System.out.println("Selected Buildings: ");
+        for (int i = 0; i < selectedBuildings.size(); i++) {
             System.out.println(selectedBuildings.get(i).getName());
         }
-        System.out.println("origin: " + curr_latitude + "," + curr_longitude);
+        List<Building> remainingBuildings = new ArrayList<>(selectedBuildings);
+        Building currentBuilding = findTheNearestBuildingFromStart();
+        remainingBuildings.remove(currentBuilding);
+        while (!remainingBuildings.isEmpty()) {
+            double minDistance = Double.MAX_VALUE;
+            Building nearestBuilding = null;
+            for (Building building : remainingBuildings) {
+                double distance = calculateDistance(currentBuilding.getLatitude(), currentBuilding.getLongitude(),
+                        building.getLatitude(), building.getLongitude());
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestBuilding = building;
+                }
+            }
+            remainingBuildings.remove(nearestBuilding);
+            optimizedRoute.add(nearestBuilding);
+            currentBuilding = nearestBuilding;
+        }
+        System.out.println("optimizedRoute Buildings: ");
+        for (int i = 0; i < optimizedRoute.size(); i++) {
+            System.out.println(optimizedRoute.get(i).getName());
+        }
+        return optimizedRoute;
+    }
+
+    private Building findTheNearestBuildingFromStart() {
+        double minDistance = Double.MAX_VALUE;
+        Building nearestBuilding = null;
+        for (Building building : selectedBuildings) {
+            double distance = calculateDistance(curr_latitude, curr_longitude,
+                    building.getLatitude(), building.getLongitude());
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestBuilding = building;
+            }
+        }
+        return nearestBuilding;
+    }
+
+    private void showPolyLine() {
+        optimizedRoute = nearestNeighborAlgorithm();
         String apiKey = getApiKeyFromConfig();
         String baseUrl = "https://maps.googleapis.com/maps/api/directions/json?";
         String origin = "origin=" + curr_latitude + "," + curr_longitude;
-        wayPoints = selectedBuildings.subList(0, selectedBuildings.size() - 1);
+        wayPoints = optimizedRoute.subList(0, selectedBuildings.size() - 1);
+        System.out.println("wayPoints Buildings: ");
+        for (int i = 0; i < wayPoints.size(); i++) {
+            System.out.println(wayPoints.get(i).getName());
+        }
         StringBuilder waypointsParam = new StringBuilder("waypoints=");
-        System.out.println("Way points: ");
         for (int i = 0; i < wayPoints.size(); i++) {
             Building waypoint = wayPoints.get(i);
-            System.out.println(wayPoints.get(i).getName());
             waypointsParam.append(waypoint.getLatitude()).append(",").append(waypoint.getLongitude());
             if (i < wayPoints.size() - 1) {
                 waypointsParam.append("|");
             }
         }
-        Building end = selectedBuildings.get(selectedBuildings.size() - 1);
-        String destination = "destination=" + end.getLatitude() + "," + end.getLongitude();
-        System.out.println("end: " + end.getName());
-        String url = baseUrl + origin + "&" + destination + "&" + waypointsParam + "&key=" + apiKey + "&optimizeWaypoints=true&mode=bicycling";
-        System.out.println(url);
-        System.out.println("Number of origin + waypoints + end: " + (1 + wayPoints.size() + 1));
+        String destination = "destination=" + optimizedRoute.get(optimizedRoute.size() - 1).getLatitude() + "," + optimizedRoute.get(optimizedRoute.size() - 1).getLongitude();
+        String url = baseUrl + origin + "&" + destination + "&" + waypointsParam + "&key=" + apiKey + "&optimize=true&mode=bicycling";
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -242,7 +283,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
                         }
                         drawPolyline(polylinePoints);
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -260,7 +300,7 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
     private void drawPolyline(List<LatLng> points) {
         PolylineOptions polylineOptions = new PolylineOptions()
                 .addAll(points)
-                .width(10) // Polyline宽度
+                .width(8) // Polyline宽度
                 .color(Color.BLUE) // Polyline颜色
                 .geodesic(true); // 使用大地线插值
         mMap.addPolyline(polylineOptions);
@@ -340,7 +380,6 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
         for(int i = 0; i < selectedBuildings.size(); i++){
             if(!Objects.equals(selectedBuildings.get(i).getAudioFileName(), "null")){
                 selectedBuildings.get(i).setAudioFileResourceID(getResources().getIdentifier(selectedBuildings.get(i).getAudioFileName(), "raw", getPackageName()));
-                System.out.println(selectedBuildings.get(i).getAudioFileResourceID());
             }
         }
     }
