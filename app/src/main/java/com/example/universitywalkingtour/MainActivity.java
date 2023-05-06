@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setTitle("UOP Walk");
 
         myText = (TextView) findViewById(R.id.txtView);
-
+        myText.setVisibility(View.INVISIBLE);
         //media player
         MediaPlayer mp = new MediaPlayer();
         String audioPath = "android.resource://" + getPackageName() + "/" + R.raw.instructions;
@@ -45,12 +45,12 @@ public class MainActivity extends AppCompatActivity {
         MediaController mediaController = new MediaController( this);
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
-        mp.setVolume(50,50);
+        mp.setVolume(49,49);
         mp.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-               // videoView.start();
-             //   mp.start();
+                videoView.start();
+                mp.start();
             }
         });
 
@@ -58,17 +58,16 @@ public class MainActivity extends AppCompatActivity {
         videoView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
                 if(TextShow){
                     TextShow = false;
                     videoView.start();
                     mp.start();
-                    myText.setVisibility(View.INVISIBLE);
+                    //myText.setVisibility(View.INVISIBLE);
                 } else {
                     mp.pause();
                     videoView.pause();
                     TextShow = true;
-                    myText.setVisibility(View.VISIBLE);
+                    //myText.setVisibility(View.VISIBLE);
                 }
                 return false;
             }
