@@ -1,31 +1,20 @@
 package com.example.universitywalkingtour;
 
-import static com.example.universitywalkingtour.TripActivity.LOCATION_PERMISSION_REQUEST_CODE;
-
-
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-
-import com.android.volley.Response; // Import for Volley's Response class
-// import com.google.android.gms.common.api.Response; // Remove or comment out this line
-
-
+import com.android.volley.Response;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-
-import java.net.HttpURLConnection;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-//import com.google.android.gms.common.api.Response;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -43,44 +32,28 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.android.PolyUtil;
-
-import androidx.databinding.DataBindingUtil;
-
-
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
     private GoogleMap mMap;
+    private ActivityMapsBinding binding;
     private LatLng source;
     private LatLng destination;
-
-    public static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-
-    private ActivityMapsBinding binding;
-    public double dest_latitude;
-    public double dest_longitude;
-    public double source_latitude;
-    public double source_longitude;
+    private double dest_latitude;
+    private double dest_longitude;
+    private double source_latitude;
+    private double source_longitude;
 
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
@@ -108,7 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-
     private void requestLocationUpdates() {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000);
@@ -120,11 +92,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         dest_latitude = intent.getDoubleExtra("dest_latitude", 0.0);
         dest_longitude = intent.getDoubleExtra("dest_longitude", 0.0);
@@ -135,12 +105,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
 
         /*fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback() {
@@ -169,12 +137,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
 
         };
-
-
     };
-
-
-
 
     /**
      * Manipulates the map once available.
@@ -188,16 +151,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
         //LatLng destination = new LatLng(dest_latitude, dest_longitude);
         mMap.addMarker(new MarkerOptions().position(destination).title("Destination"));
-
-        // Add a marker for the source
+        //Add a marker for the source
         //LatLng source = new LatLng(source_latitude, source_longitude);
         sourceMarker = mMap.addMarker(new MarkerOptions().position(source).title("Your Location"));
 
-        // Set the camera position to show both markers
+        //Set the camera position to show both markers
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         builder.include(destination);
         builder.include(source);
@@ -213,7 +173,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else {
             requestLocationUpdates();
         }
-
 
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setInterval(10000);
@@ -240,7 +199,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, padding));
             }
         });*/
-
 
       /*  String url = "https://maps.googleapis.com/maps/api/directions/json" +
                 "?origin=" + source_latitude + "," + source_longitude +
@@ -295,7 +253,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String destination = "destination=" + dest_latitude + "," + dest_longitude;
         StringBuilder waypointsParam = new StringBuilder("waypoints=");
 
-
         String url = baseUrl + origin + "&" + destination + "&" + waypointsParam + "&key=" + apiKey +"&optimize=true&mode=bicycling";
         System.out.println(url);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -320,7 +277,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
                         }
                         drawPolyline(polylinePoints);
-
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -333,7 +289,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         requestQueue.add(jsonObjectRequest);
-
     }
 
     private void drawPolyline(List<LatLng> points) {
