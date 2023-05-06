@@ -111,39 +111,39 @@ public class TripActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         };
 
-        //Selection Window
+        // Selection Window
         AlertDialog.Builder selectionWindowBuilder = new AlertDialog.Builder(TripActivity.this);
         selectionWindowBuilder.setCancelable(false);
-        selectionWindowBuilder.setTitle("Select Building Types to Visit: ");
-        selectionWindowBuilder.setMultiChoiceItems(buildingTypes, selectedItems, new DialogInterface.OnMultiChoiceClickListener() {
+        selectionWindowBuilder.setTitle("Select Building Type to Visit: ");
+
+        selectionWindowBuilder.setSingleChoiceItems(buildingTypes, -1, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i, boolean isChecked) {
-                selectedItems[i] = isChecked;
-            }
-        });
-        selectionWindowBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-            //When the user clicked on confirm
-            @Override
-            public void onClick(DialogInterface dialogInterface, int which) {
-                //Add corresponding buildings to the list
-                for (int i = 0; i < allBuildings.size(); i++) {
-                    for (int j = 0; j < selectedItems.length; j++) {
-                        if (selectedItems[j] && allBuildings.get(i).getType().equals(buildingTypes[j])) {
-                            selectedBuildings.add(allBuildings.get(i));
-                        }
+            public void onClick(DialogInterface dialogInterface, int i) {
+                selectedBuildings.clear();
+                for (int j = 0; j < allBuildings.size(); j++) {
+                    if (allBuildings.get(j).getType().equals(buildingTypes[i])) {
+                        selectedBuildings.add(allBuildings.get(j));
                     }
                 }
+            }
+        });
+
+        selectionWindowBuilder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            // When the user clicked on confirm
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
                 setBuildingAudioFileResourceIDs();
                 dialogInterface.dismiss();
-                //showPolyLine
+                // showPolyLine
                 moveToCurrentLocation();
                 showPolyLine();
                 addBuildingMarkers();
-                //play audio introduction
+                // play audio introduction
                 buildingRecordingPlayer = MediaPlayer.create(TripActivity.this, R.raw.uopwalk_01);
                 buildingRecordingPlayer.start();
             }
         });
+
         AlertDialog selectionWindow = selectionWindowBuilder.create();
         selectionWindow.setCanceledOnTouchOutside(false);
         selectionWindow.show();
